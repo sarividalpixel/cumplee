@@ -10,7 +10,7 @@
             --bg: #fff0f3;
             --text: #590d22;
         }
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+        body, html { margin: 0; padding: 0; font-family: 'Oswald', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
         .slide { height: 100vh; width: 100vw; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex; animation: fadeIn 0.8s ease-in-out; }
         h1 { font-size: 3rem; text-transform: uppercase; margin: 10px; }
@@ -18,47 +18,156 @@
         input { padding: 12px; border-radius: 8px; border: 2px solid var(--primary); margin: 10px; width: 250px; outline: none; }
         button { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; transition: 0.3s; }
         button:disabled { background: #ccc; cursor: not-allowed; }
-        .details { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .options { margin: 20px 0; }
+        .details { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    max-width: 90%; 
+    text-align: left; /* Alinea el texto a la izquierda */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los botones y elementos a la izquierda */
+}
+
+.details p {
+    margin: 10px 0;
+    width: 100%;
+}
+
+.details button {
+    margin-left: 0; /* Asegura que no tengan margen extra a la izquierda */
+    margin-top: 5px;
+}
+        .detail-item {
+    display: flex;
+    justify-content: space-between; /* Texto a la izquierda, icono a la derecha */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Línea sutil separadora */
+    padding-bottom: 8px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1); /* Efecto sutil al pasar el mouse */
+}
+
+.icon-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--primary); /* Color de tus iconos */
+}
+        /* Contenedor de opciones */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Todo a la izquierda */
+    width: 100%;
+    max-width: 250px;
+    margin-top: 20px;
+}
+
+/* Ocultamos el circulito original */
+.options-container input[type="radio"] {
+    display: none;
+}
+
+/* Estilo del texto seleccionable */
+.options-container label {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px 0;
+    transition: all 0.3s;
+    opacity: 0.6;
+    width: 100%;
+    text-align: left;
+}
+
+/* Estilo cuando pasan el mouse o seleccionan */
+.options-container label:hover {
+    opacity: 1;
+    padding-left: 10px; /* Efecto de desplazamiento */
+}
+
+.options-container input[type="radio"]:checked + label {
+    opacity: 1;
+    font-weight: bold;
+    color: var(--primary);
+    padding-left: 10px;
+}
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div id="slide1" class="slide active">
-        <h1 id="intro-text">¡¡ ES MI CUMPLEAÑOS !!</h1>
+        <h1 id="intro-text"> ES MI CUMPLEAÑOS !!</h1>
     </div>
 
     <div id="slide2" class="slide">
         <h1>IDENTIFICATE</h1>
-        <p style="font-size: 0.9rem;">Nombre</p>
+        <p style="font-size: 1rem;">Nombre</p>
         <input type="text" id="userName" placeholder="Escribe tu nombre aquí...">
         <button id="btnIngresar" onclick="nextSlide(3)" disabled>INGRESAR</button>
     </div>
 
     <div id="slide3" class="slide">
-        <div class="details">
-            <h1>DETALLES DEL EVENTO</h1>
-            <p><strong>FECHA:</strong> 15 de Octubre <button onclick="window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mi+Cumple&dates=20261015T210000Z/20261015T235900Z')">📅 Agendar</button></p>
-            <p><strong>HORARIO:</strong> 21:00 hs</p>
-            <p><strong>UBICACIÓN:</strong> Calle Falsa 123 <button onclick="window.open('https://maps.google.com/?q=Calle+Falsa+123')">📍 Ver Mapa</button></p>
-            <button onclick="nextSlide(4)">CONFIRMAR ASISTENCIA</button>
+    <div class="details">
+        <h1 style="align-self: center; margin-bottom: 25px;">DETALLES</h1>
+        
+        <div class="detail-item">
+            <div>
+                <small style="text-transform: uppercase; color: #888;">Fecha</small>
+                <p style="margin: 0; font-weight: bold;">15 de Octubre - 21:00 hs</p>
+            </div>
+            <button class="icon-btn" onclick="window.open('URL_CALENDARIO')" title="Agendar">
+                <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+            </button>
         </div>
+
+        <div class="detail-item">
+            <div>
+                <small style="text-transform: uppercase; color: #888;">Ubicación</small>
+                <p style="margin: 0; font-weight: bold;">Calle Falsa 123, Ciudad</p>
+            </div>
+            <button class="icon-btn" onclick="window.open('URL_MAPA')" title="Ver Mapa">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </button>
+        </div>
+
+        <button style="align-self: center; margin-top: 20px; width: 100%;" onclick="nextSlide(4)">CONFIRMAR ASISTENCIA</button>
     </div>
+</div>
 
     <div id="slide4" class="slide">
-        <h1>¿VENÍS?</h1>
-        <form id="attendanceForm">
-            <div class="options">
-                <input type="radio" name="asiste" value="Si" id="si" onclick="checkRadio()"> <label for="si">Si, voy</label><br>
-                <input type="radio" name="asiste" value="No" id="no" onclick="checkRadio()"> <label for="no">No, te odio</label>
-            </div>
-            <button type="button" id="btnEnviar" onclick="submitData()" disabled>ENVIAR</button>
+    <div style="text-align: left; width: 100%; max-width: 300px;">
+        <h1 style="margin-bottom: 10px;">¿VENÍS?</h1>
+        
+        <form id="attendanceForm" class="options-container">
+            <input type="radio" name="r_asiste" value="si_voy" id="si">
+            <label for="si">si, voy</label>
+
+            <input type="radio" name="r_asiste" value="no_odio" id="no">
+            <label for="no">no, te odio</label>
         </form>
+
+        <button id="btnEnviar" onclick="enviarDatos()" disabled style="width: 100%; margin-top: 30px;">ENVIAR</button>
     </div>
+</div>
 
     <div id="slide5" class="slide">
-        <h1>¡¡ NOS VEMOS PRONTO !!</h1>
+        <h1> NOS VEMOS PRONTO !!</h1>
     </div>
 
     <div id="slide6" class="slide">
@@ -101,6 +210,12 @@
                 nextSlide(6);
             }
         }
+        // Agrega esto en tu <script> para que escuche cuando tocan las etiquetas
+document.querySelectorAll('input[name="r_asiste"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        document.getElementById('btnEnviar').disabled = false;
+    });
+});
     </script>
 </body>
 </html>
