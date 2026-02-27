@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cumpleaños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #ff4d6d; --bg: #fff0f3; --t: #590d22; }
+        
+        body, html { 
+            margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; 
+            background: var(--bg); color: var(--t); height: 100%; overflow: hidden; 
+        }
+
+        .slide { 
+            height: 100vh; width: 100vw; display: none; 
+            flex-direction: column; align-items: center; justify-content: center; 
+            padding: 20px; box-sizing: border-box; 
+        }
+
+        .active { display: flex !important; }
+
+        /* BOTONES BLANCOS CON BORDE ROSA */
+        button {
+            background: #fff !important; color: var(--p) !important;
+            border: 3px solid var(--p) !important; padding: 18px 40px;
+            border-radius: 50px; cursor: pointer; font-weight: bold;
+            text-transform: uppercase; transition: 0.3s; font-size: 1.1rem;
+        }
+
+        button:hover:not(:disabled) { background: var(--p) !important; color: #fff !important; }
+        button:disabled { border-color: #eee !important; color: #ccc !important; cursor: not-allowed; }
+
+        /* CUADRADO GIGANTE */
+        .card {
+            background: white; padding: 70px; border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            width: 90%; max-width: 800px; min-height: 500px;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: 100%; border-bottom: 2px solid var(--bg); padding: 20px 0;
+        }
+
+        .icon-svg { width: 45px; height: 45px; fill: var(--p); cursor: pointer; margin-left: 30px; }
+
+        /* RADIOS SELECCIONABLES */
+        .opt-list { display: flex; flex-direction: column; width: 100%; margin: 30px 0; }
+        .opt-list input { display: none; }
+        .opt-list label { 
+            font-size: 2.5rem; opacity: 0.3; cursor: pointer; 
+            transition: 0.3s; text-align: left; padding: 10px 0;
+        }
+        .opt-list input:checked + label { opacity: 1; color: var(--p); font-weight: bold; padding-left: 20px; }
+
+        input[type="text"] {
+            padding: 15px; border-radius: 30px; border: 2px solid var(--p);
+            font-size: 1.2rem; width: 280px; text-align: center; outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <form name="version_final_v4" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="guest">
+        <input type="text" name="status">
+    </form>
+
+    <div id="s1" class="slide active"><h1>¡¡ ES MI CUMPLEAÑOS !!</h1></div>
+
+    <div id="s2" class="slide">
+        <h1>IDENTIFICATE</h1>
+        <p>nombre</p>
+        <input type="text" id="n" placeholder="...">
+        <button id="bI" onclick="go(3)" disabled style="margin-top:20px">INGRESAR</button>
+    </div>
+
+    <div id="s3" class="slide">
+        <div class="card">
+            <h1 style="align-self:center">DETALLES</h1>
+            <div class="item">
+                <div style="text-align:left">
+                    <small>FECHA</small>
+                    <p style="font-size:1.5rem; font-weight:bold; margin:0">Sábado 15 Oct - 21:00hs</p>
+                </div>
+                <svg class="icon-svg" onclick="window.open('https://calendar.google.com')" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+            </div>
+            <div class="item">
+                <div style="text-align:left">
+                    <small>LUGAR</small>
+                    <p style="font-size:1.5rem; font-weight:bold; margin:0">Calle Falsa 123</p>
+                </div>
+                <svg class="icon-svg" onclick="window.open('https://maps.google.com')" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <button onclick="go(4)">Confirmar Asistencia</button>
+        </div>
+    </div>
+
+    <div id="s4" class="slide">
+        <div style="width:90%; max-width:500px">
+            <h1 style="text-align:left">¿VENÍS?</h1>
+            <div class="opt-list">
+                <input type="radio" name="ans" value="si" id="y" onchange="document.getElementById('bE').disabled=false">
+                <label for="y">si, voy</label>
+                <input type="radio" name="ans" value="no" id="no" onchange="document.getElementById('bE').disabled=false">
+                <label for="no">no, te odio</label>
+            </div>
+            <button id="bE" onclick="send()" disabled style="width:100%">ENVIAR</button>
+        </div>
+    </div>
+
+    <div id="s5" class="slide"><h1>¡¡ NOS VEMOS PRONTO !!</h1></div>
+    <div id="s6" class="slide"><h1>OK.</h1></div>
+
+    <script>
+        function go(n){
+            document.querySelectorAll('.slide').forEach(x=>x.classList.remove('active'));
+            document.getElementById('s'+n).classList.add('active');
+        }
+
+        setTimeout(()=>{
+            document.querySelector('#s1 h1').innerText = "Y ESTÁS INVITADO";
+            setTimeout(()=>go(2), 1500);
+        }, 2000);
+
+        document.getElementById('n').addEventListener('input', (e)=>{
+            document.getElementById('bI').disabled = e.target.value.trim()==="";
+        });
+
+        function send(){
+            const name = document.getElementById('n').value;
+            const res = document.querySelector('input[name="ans"]:checked').value;
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({"form-name":"version_final_v4","guest":name,"status":res}).toString()
+            }).then(()=>go(res==='si'?5:6));
+        }
+    </script>
+</body>
+</html>
