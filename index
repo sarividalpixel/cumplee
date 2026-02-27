@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Mi Cumpleaños!</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --bg: #fff0f3;
+            --text: #590d22;
+        }
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+        .slide { height: 100vh; width: 100vw; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box; }
+        .active { display: flex; animation: fadeIn 0.8s ease-in-out; }
+        h1 { font-size: 3rem; text-transform: uppercase; margin: 10px; }
+        p { font-size: 1.2rem; }
+        input { padding: 12px; border-radius: 8px; border: 2px solid var(--primary); margin: 10px; width: 250px; outline: none; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; transition: 0.3s; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .details { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .options { margin: 20px 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="slide1" class="slide active">
+        <h1 id="intro-text">¡¡ ES MI CUMPLEAÑOS !!</h1>
+    </div>
+
+    <div id="slide2" class="slide">
+        <h1>IDENTIFICATE</h1>
+        <p style="font-size: 0.9rem;">Nombre</p>
+        <input type="text" id="userName" placeholder="Escribe tu nombre aquí...">
+        <button id="btnIngresar" onclick="nextSlide(3)" disabled>INGRESAR</button>
+    </div>
+
+    <div id="slide3" class="slide">
+        <div class="details">
+            <h1>DETALLES DEL EVENTO</h1>
+            <p><strong>FECHA:</strong> 15 de Octubre <button onclick="window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mi+Cumple&dates=20261015T210000Z/20261015T235900Z')">📅 Agendar</button></p>
+            <p><strong>HORARIO:</strong> 21:00 hs</p>
+            <p><strong>UBICACIÓN:</strong> Calle Falsa 123 <button onclick="window.open('https://maps.google.com/?q=Calle+Falsa+123')">📍 Ver Mapa</button></p>
+            <button onclick="nextSlide(4)">CONFIRMAR ASISTENCIA</button>
+        </div>
+    </div>
+
+    <div id="slide4" class="slide">
+        <h1>¿VENÍS?</h1>
+        <form id="attendanceForm">
+            <div class="options">
+                <input type="radio" name="asiste" value="Si" id="si" onclick="checkRadio()"> <label for="si">Si, voy</label><br>
+                <input type="radio" name="asiste" value="No" id="no" onclick="checkRadio()"> <label for="no">No, te odio</label>
+            </div>
+            <button type="button" id="btnEnviar" onclick="submitData()" disabled>ENVIAR</button>
+        </form>
+    </div>
+
+    <div id="slide5" class="slide">
+        <h1>¡¡ NOS VEMOS PRONTO !!</h1>
+    </div>
+
+    <div id="slide6" class="slide">
+        <h1>OK.</h1>
+    </div>
+
+    <script>
+        // Lógica de transición rápida inicial
+        setTimeout(() => {
+            document.getElementById('intro-text').innerText = "Y ESTÁS INVITADO";
+            setTimeout(() => {
+                nextSlide(2);
+            }, 1500);
+        }, 2000);
+
+        // Habilitar botón de nombre
+        document.getElementById('userName').addEventListener('input', function(e) {
+            document.getElementById('btnIngresar').disabled = e.target.value.trim() === "";
+        });
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+        }
+
+        function checkRadio() {
+            document.getElementById('btnEnviar').disabled = false;
+        }
+
+        function submitData() {
+            const nombre = document.getElementById('userName').value;
+            const respuesta = document.querySelector('input[name="asiste"]:checked').value;
+            
+            // AQUÍ PUEDES CONECTAR CON FORMSPREE O GOOGLE SHEETS
+            console.log("Datos:", nombre, respuesta);
+
+            if(respuesta === "Si") {
+                nextSlide(5);
+            } else {
+                nextSlide(6);
+            }
+        }
+    </script>
+</body>
+</html>
