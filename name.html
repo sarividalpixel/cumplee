@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Mi Cumpleaños!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff4d6d; /* Rosa principal */
+            --primary-hover: #ff758f; /* Rosa más claro para el hover completo */
+            --bg: #fff0f3; /* Fondo rosa pálido de la invitación */
+            --text-dark: #590d22; /* Texto oscuro */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        /* Estilo general para las "diapositivas" */
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            display: none; /* Ocultas por defecto */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Clase para mostrar la diapositiva actual con animación */
+        .active {
+            display: flex;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* --- NUEVO ESTILO DE BOTÓN (BORDES) --- */
+        button, .btn-style {
+            background-color: white; /* Fondo blanco inicial */
+            color: var(--primary); /* Texto rosa */
+            border: 2px solid var(--primary); /* Borde rosa */
+            padding: 15px 30px;
+            border-radius: 30px; /* Bordes muy redondeados */
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease; /* Animación suave */
+            outline: none;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Sombra suave */
+        }
+
+        /* --- EFECTO HOVER PARA BOTONES (RELLENO) --- */
+        button:hover:not(:disabled), .btn-style:hover {
+            background-color: var(--primary); /* Fondo rosa al pasar el mouse */
+            color: white; /* Texto blanco */
+            transform: translateY(-2px); /* Pequeño salto hacia arriba */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Estilo para botón deshabilitado (Enviar antes de elegir) */
+        button:disabled {
+            background-color: #f0f0f0;
+            color: #bbb;
+            border-color: #ddd;
+            cursor: not-allowed;
+            pointer-events: none; /* Evita que el hover funcione */
+        }
+
+        /* --- NUEVO ESTILO DEL CONTENEDOR DE DETALLES (MÁS GRANDE) --- */
+        .details-container {
+            background: white;
+            padding: 50px; /* Mucho más espacio interno */
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Sombra más pronunciada */
+            width: 90%; /* Ocupa más ancho en móvil */
+            max-width: 600px; /* Un tamaño máximo generoso para escritorio */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Todo alineado a la izquierda por defecto */
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .details-container h1 {
+            align-self: center; /* Título centrado dentro del cuadro alineado a la izq */
+            font-size: 2.8rem;
+            margin-bottom: 40px;
+        }
+
+        /* Contenedor de cada item de información (Fecha, Ubicación) */
+        .detail-item {
+            display: flex;
+            justify-content: space-between; /* Texto a la izq, icono a la der */
+            align-items: center;
+            width: 100%;
+            margin-bottom: 25px; /* Más separación entre bloques */
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee; /* Línea separadora sutil */
+        }
+
+        /* Contenedor de los textos dentro del item */
+        .detail-texts {
+            flex: 1; /* Ocupa el espacio disponible */
+            padding-right: 20px; /* Espacio de seguridad antes del icono */
+        }
+
+        .detail-texts small {
+            text-transform: uppercase;
+            color: #888;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail-texts p {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* --- NUEVO ESTILO PARA ICONOS (MÁS SEPARADOS) --- */
+        .icon-btn {
+            background: none;
+            border: none;
+            padding: 10px; /* Espacio alrededor del icono para tocar fácil */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            margin-left: 20px; /* --- SEPARACIÓN EXTRA DEL TEXTO --- */
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.15); /* Efecto de agrandado al pasar el mouse */
+        }
+
+        .icon-btn svg {
+            width: 32px; /* Iconos un poco más grandes */
+            height: 32px;
+            fill: var(--primary); /* Color rosa del icono */
+        }
+
+        /* --- ESTILOS DE LA PANTALLA DE CONFIRMACIÓN (VENÍS?) --- */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        /* Ocultamos el circulito original */
+        .options-container input[type="radio"] {
+            display: none;
+        }
+
+        /* Estilo del texto seleccionable */
+        .options-container label {
+            font-size: 1.8rem; /* Letra grande */
+            cursor: pointer;
+            padding: 15px 0;
+            transition: all 0.3s;
+            opacity: 0.5; /* Más transparente cuando no está seleccionado */
+            width: 100%;
+            font-weight: 400;
+        }
+
+        /* Efectos al pasar el mouse y al seleccionar */
+        .options-container label:hover {
+            opacity: 1;
+            padding-left: 15px; /* Efecto de desplazamiento */
+        }
+
+        /* Estilo cuando la opción está chequeada */
+        .options-container input[type="radio"]:checked + label {
+            opacity: 1;
+            font-weight: 700; /* Negrita */
+            color: var(--primary); /* Color rosa */
+            padding-left: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <form name="confirmaciones_v2" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="nombre">
+        <input type="text" name="asistencia">
+    </form>
+
+    <div id="slide1" class="slide active">
+        <h1 id="intro-text">¡¡ ES MI CUMPLEAÑOS !!</h1>
+    </div>
+
+    <div id="slide2" class="slide">
+        <div style="max-width: 400px; width: 100%;">
+            <h1>IDENTIFICATE</h1>
+            <p style="font-size: 1.1rem; text-transform: uppercase; color: #888; margin-bottom: 5px;">tu nombre</p>
+            <input type="text" id="userName" placeholder="Escribe tu nombre aquí..." style="padding: 15px; border-radius: 30px; border: 2px solid #ddd; margin-bottom: 20px; width: 100%; font-size: 1.1rem; box-sizing: border-box; outline: none; transition: border-color 0.3s;">
+            <button id="btnIngresar" onclick="nextSlide(3)" disabled style="width: 100%;">INGRESAR</button>
+        </div>
+    </div>
+
+    <div id="slide3" class="slide">
+        <div class="details-container">
+            <h1>DETALLES</h1>
+            
+            <div class="detail-item">
+                <div class="detail-texts">
+                    <small>Fecha y Hora</small>
+                    <p>Sábado 15 de Octubre</p>
+                    <p style="font-size: 1.1rem; font-weight: 400;">21:00 hs</p>
+                </div>
+                <button class="icon-btn" onclick="window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Cumple+de+NOMBRE&dates=20241015T210000Z/20241016T020000Z&details=¡Te+espero+para+festejar!&location=Calle+Falsa+123')" title="Agendar en calendario">
+                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                </button>
+            </div>
+
+            <div class="detail-item">
+                <div class="detail-texts">
+                    <small>Lugar</small>
+                    <p>Calle Falsa 123</p>
+                    <p style="font-size: 1.1rem; font-weight: 400;">Ciudad, País</p>
+                </div>
+                <button class="icon-btn" onclick="window.open('https://goo.gl/maps/xyz123')" title="Ver ubicación en Google Maps">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </button>
+            </div>
+
+            <button style="align-self: center; margin-top: 30px; width: 100%;" onclick="nextSlide(4)">CONFIRMAR ASISTENCIA</button>
+        </div>
+    </div>
+
+    <div id="slide4" class="slide">
+        <div style="text-align: left; width: 100%; max-width: 300px;">
+            <h1>¿VENÍS?</h1>
+            
+            <form id="attendanceForm" class="options-container">
+                <input type="radio" name="r_asiste" value="si_voy" id="si">
+                <label for="si">si, voy</label>
+
+                <input type="radio" name="r_asiste" value="no_odio" id="no">
+                <label for="no">no, te odio</label>
+            </form>
+
+            <button id="btnEnviar" onclick="enviarDatos()" disabled style="width: 100%;">ENVIAR</button>
+        </div>
+    </div>
+
+    <div id="slide5" class="slide">
+        <h1>¡¡ NOS VEMOS PRONTO !!</h1>
+    </div>
+
+    <div id="slide6" class="slide">
+        <h1>OK.</h1>
+    </div>
+
+    <script>
+        // --- LÓGICA DE NAVEGACIÓN AUTOMÁTICA ---
+        
+        // Al cargar la página, esperamos 2 segundos y cambiamos el texto
+        setTimeout(() => {
+            const intro = document.getElementById('intro-text');
+            intro.style.opacity = 0; // Desvanecer
+            setTimeout(() => {
+                intro.innerText = "Y ESTÁS INVITADO";
+                intro.style.opacity = 1; // Aparecer
+            }, 500);
+
+            // 1.5 segundos después del cambio de texto, pasamos a la diapo 2
+            setTimeout(() => {
+                nextSlide(2);
+            }, 1500);
+        }, 2000);
+
+        // --- FUNCIONES GENERALES ---
+
+        // Función para cambiar de diapositiva
+        function nextSlide(n) {
+            // Ocultar todas las slides
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            // Mostrar la slide n
+            document.getElementById('slide' + n).classList.add('active');
+        }
+
+        // Habilitar botón de Ingresar solo si hay texto en el nombre
+        const inputNombre = document.getElementById('userName');
+        const btnIngresar = document.getElementById('btnIngresar');
+
+        inputNombre.addEventListener('input', function(e) {
+            btnIngresar.disabled = e.target.value.trim() === "";
+            if(!btnIngresar.disabled) {
+                inputNombre.style.borderColor = "var(--primary)";
+            } else {
+                inputNombre.style.borderColor = "#ddd";
+            }
+        });
+
+        // Habilitar botón Enviar cuando seleccionan una opción
+        document.querySelectorAll('input[name="r_asiste"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                document.getElementById('btnEnviar').disabled = false;
+            });
+        });
+
+        // --- ENVÍO DE DATOS A NETLIFY FORMS ---
+        function enviarDatos() {
+            const nombre = document.getElementById('userName').value;
+            const respuesta = document.querySelector('input[name="r_asiste"]:checked').value;
+            const btnEnviar = document.getElementById('btnEnviar');
+
+            // Cambiar texto del botón para feedback visual
+            btnEnviar.innerText = "ENVIANDO...";
+            btnEnviar.disabled = true;
+
+            // Enviar datos usando fetch de forma silenciosa
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    "form-name": "confirmaciones_v2", // Mismo nombre que el form oculto
+                    "nombre": nombre,
+                    "asistencia": respuesta
+                }).toString(),
+            })
+            .then(() => {
+                // Una vez enviado, mostramos la pantalla final correspondiente
+                if(respuesta === "si_voy") {
+                    nextSlide(5);
+                } else {
+                    nextSlide(6);
+                }
+            })
+            .catch((error) => {
+                // En caso de error, avisar (puedes quitar esto luego)
+                alert("Hubo un error al enviar, por favor intenta de nuevo.");
+                btnEnviar.innerText = "ENVIAR";
+                btnEnviar.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
