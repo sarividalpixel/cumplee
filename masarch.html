@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Mi Cumpleaños!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --bg: #fff0f3;
+            --text-dark: #590d22;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+            overflow: hidden; height: 100%;
+        }
+
+        .slide {
+            height: 100vh; width: 100vw;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 20px; box-sizing: border-box;
+        }
+
+        .active { display: flex; animation: fadeIn 0.8s ease-in-out; }
+
+        h1 { font-size: 3rem; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; }
+
+        /* --- BOTONES BLANCOS CON BORDE ROSA --- */
+        button, .btn-style {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary); /* Se pinta de rosa al pasar el mouse */
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: white;
+            color: #ccc;
+            border-color: #eee;
+            cursor: not-allowed;
+        }
+
+        /* --- CUADRADO DE DETALLES MÁS GRANDE --- */
+        .details-container {
+            background: white;
+            padding: 60px; /* Aumentado para que sea más grande */
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 95%; 
+            max-width: 700px; /* Ancho máximo mayor */
+            min-height: 450px; /* Altura mínima para que se vea imponente */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 40px; /* Más separación del texto */
+            transition: transform 0.2s;
+        }
+
+        .icon-btn svg { width: 35px; height: 35px; fill: var(--primary); }
+
+        /* --- OPCIONES DE CONFIRMACIÓN --- */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .options-container input[type="radio"] { display: none; }
+
+        .options-container label {
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px 0;
+            opacity: 0.4;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .options-container input[type="radio"]:checked + label {
+            opacity: 1;
+            font-weight: bold;
+            color: var(--primary);
+            padding-left: 15px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <form name="confirmaciones_final" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="nombre">
+        <input type="text" name="asistencia">
+    </form>
+
+    <div id="slide1" class="slide active">
+        <h1 id="intro-text">¡¡ ES MI CUMPLEAÑOS !!</h1>
+    </div>
+
+    <div id="slide2" class="slide">
+        <h1>IDENTIFICATE</h1>
+        <p>nombre</p>
+        <input type="text" id="userName" placeholder="..." style="padding: 15px; border-radius: 30px; border: 2px solid var(--primary); width: 280px; font-size: 1.1rem; text-align: center; outline: none;">
+        <br>
+        <button id="btnIngresar" onclick="nextSlide(3)" disabled>INGRESAR</button>
+    </div>
+
+    <div id="slide3" class="slide">
+        <div class="details-container">
+            <h1 style="align-self: center;">DETALLES</h1>
+            <div class="detail-item">
+                <div>
+                    <p style="color: #888; font-size: 0.9rem; margin: 0;">FECHA</p>
+                    <p style="font-size: 1.4rem; font-weight: bold;">Sábado 15 de Octubre - 21:00 hs</p>
+                </div>
+                <button class="icon-btn" onclick="window.open('https://calendar.google.com')">
+                    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                </button>
+            </div>
+            <div class="detail-item">
+                <div>
+                    <p style="color: #888; font-size: 0.9rem; margin: 0;">UBICACIÓN</p>
+                    <p style="font-size: 1.4rem; font-weight: bold;">Calle Falsa 123, Ciudad</p>
+                </div>
+                <button class="icon-btn" onclick="window.open('https://maps.google.com')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </button>
+            </div>
+            <button style="width: 100%; margin-top: 20px;" onclick="nextSlide(4)">CONFIRMAR ASISTENCIA</button>
+        </div>
+    </div>
+
+    <div id="slide4" class="slide">
+        <div style="text-align: left; width: 100%; max-width: 400px;">
+            <h1>¿VENÍS?</h1>
+            <div class="options-container">
+                <input type="radio" name="r_asiste" value="si_voy" id="si" onchange="activarEnviar()">
+                <label for="si">si, voy</label>
+
+                <input type="radio" name="r_asiste" value="no_odio" id="no" onchange="activarEnviar()">
+                <label for="no">no, te odio</label>
+            </div>
+            <button id="btnEnviar" onclick="enviarDatos()" disabled style="width: 100%;">ENVIAR</button>
+        </div>
+    </div>
+
+    <div id="slide5" class="slide"><h1>¡¡ NOS VEMOS PRONTO !!</h1></div>
+    <div id="slide6" class="slide"><h1>OK.</h1></div>
+
+    <script>
+        // Transición inicial automática
+        setTimeout(() => {
+            document.getElementById('intro-text').innerText = "Y ESTÁS INVITADO";
+            setTimeout(() => nextSlide(2), 1500);
+        }, 2000);
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
+        }
+
+        // Habilitar botón nombre
+        document.getElementById('userName').addEventListener('input', (e) => {
+            document.getElementById('btnIngresar').disabled = e.target.value.trim() === "";
+        });
+
+        // FUNCIÓN CLAVE: Habilitar botón de enviar cuando se selecciona radio
+        function activarEnviar() {
+            document.getElementById('btnEnviar').disabled = false;
+        }
+
+        function enviarDatos() {
+            const nombre = document.getElementById('userName').value;
+            const respuesta = document.querySelector('input[name="r_asiste"]:checked').value;
+            
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    "form-name": "confirmaciones_final",
+                    "nombre": nombre,
+                    "asistencia": respuesta
+                }).toString(),
+            }).then(() => {
+                nextSlide(respuesta === "si_voy" ? 5 : 6);
+            });
+        }
+    </script>
+</body>
+</html>
